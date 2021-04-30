@@ -8,7 +8,7 @@ The user must independently generate two keys: one public and accessible to all 
 
 Math behind RSA:
 
-We choose two prime numbers p and q and define n = pq which we will call modulo. We also compute the euler function of n:
+We choose two prime numbers p and q and define n = pq which we will call module. We also compute the euler function of n:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\varphi(n)=n\cdot&space;\left[\left(1-\frac{1}{p_1}\right)\left(1-\frac{1}{p_2}\right)\cdots\left(1-\frac{1}{p_r}\right)\right]&space;=&space;n&space;\prod_{p\mid&space;n}&space;\left(1-\frac{1}{p}\right)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\varphi(n)=n\cdot&space;\left[\left(1-\frac{1}{p_1}\right)\left(1-\frac{1}{p_2}\right)\cdots\left(1-\frac{1}{p_r}\right)\right]&space;=&space;n&space;\prod_{p\mid&space;n}&space;\left(1-\frac{1}{p}\right)" title="\varphi(n)=n\cdot \left[\left(1-\frac{1}{p_1}\right)\left(1-\frac{1}{p_2}\right)\cdots\left(1-\frac{1}{p_r}\right)\right] = n \prod_{p\mid n} \left(1-\frac{1}{p}\right)" /></a>
 
@@ -26,7 +26,7 @@ Now we are searching for a number d such that ed = 1 mod((p-1)(q-1)). To find d 
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=e&space;x&space;&plus;&space;\varphi(n)&space;y&space;=&space;GCD(e,&space;\varphi(n))" target="_blank"><img src="https://latex.codecogs.com/gif.latex?e&space;x&space;&plus;&space;\varphi(n)&space;y&space;=&space;GCD(e,&space;\varphi(n))" title="e x + \varphi(n) y = GCD(e, \varphi(n))" /></a>
 
-Since e and phi (n) are coprime integers we have that x is the multiplicative inverse of e modulo phi (n) and y is the multiplicative inverse of phi (n) modulo e, so x=d.
+Since e and phi (n) are coprime integers we have that x is the multiplicative inverse of e module phi (n) and y is the multiplicative inverse of phi (n) modulo e, so x=d.
 
 If we have an 'm' message the encrypted message will be:
 
