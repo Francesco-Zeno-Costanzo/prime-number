@@ -1,7 +1,11 @@
 import numpy as np
 import random as rm
 
+print('prima di avviare modificare i path nel codice \n')
+
 def mil_rab(p):
+    '''Test di rpimalità di miller rabin
+    '''
     if p == 1: return False
     if p == 2: return True
     if p % 2 == 0: return False
@@ -20,6 +24,9 @@ def mil_rab(p):
 
 
 def is_prime(p, r):
+    '''chiamando mil_rab controlla se un numero è primo
+       r è il numero di tentativi
+    '''
     for i in range(r):
         if mil_rab(p) == True:
             return True
@@ -28,6 +35,9 @@ def is_prime(p, r):
 
 
 def gen_primo(k, r):
+    '''genera casualmnete un numero primo di k bit
+       r è il numero di tentativi
+    '''
     if k < 2:
         return None
     while True:
@@ -37,12 +47,16 @@ def gen_primo(k, r):
 
 
 def MCD(a,b):
+    '''Calcolo del massimo comune divisore fra a e b
+    '''
     while b != 0:
         a, b = b, a % b
     return a
 
 
 def CO(phi):
+    '''calcola un numero che è coprimo con phi
+    '''
     while True:
         H=rm.randrange(2, phi)
         if MCD(H, phi)==1:
@@ -50,6 +64,8 @@ def CO(phi):
 
 
 def EMCD(a, b):
+    '''algoritmo esteso di eculide
+    '''
     x=0; X=1
     y=1; Y=0
     r=b; R=a
@@ -62,6 +78,8 @@ def EMCD(a, b):
 
 
 def MI(a, b):
+    ''' tramite ECDM calcola l'inverso moltiplicativo
+    '''
     g, x, y =EMCD(a, b)
     if x<0:
         x+=b
@@ -69,6 +87,8 @@ def MI(a, b):
 
 
 def gen_chiavi(dim, r):
+    '''genera le chiavi lunghe dim bit
+    '''
     p=gen_primo(dim, r)
     q=gen_primo(dim, r)
     N=p*q
@@ -79,6 +99,8 @@ def gen_chiavi(dim, r):
 
 
 def cifra(e, N, msg):
+    '''cifra il messaggio
+    '''
     cifr = ""
     for l in msg:
         m = ord(l)
@@ -88,6 +110,8 @@ def cifra(e, N, msg):
 
 
 def decifra(d, N, cifr):
+    '''decifra il messaggio
+    '''
     msg = ""
     lett = cifr.split()
     for l in lett:
@@ -107,7 +131,7 @@ def main():
     E=int(input("generare?"))
     if E==0:
         dim=int(input("dimensione in bit della chiave:"))
-        r=int(input("numeri di tentativi per il test di meller rabin, 40 possono andare:"))
+        r=int(input("numeri di tentativi per il test di miller rabin, 40 possono andare:"))
         N, e, d=gen_chiavi(dim, r)
         path=r"C:\\Users\\franc\\Desktop\\chiavi.txt"
         file= open(path, "w")
