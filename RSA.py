@@ -1,14 +1,11 @@
-import numpy as np
 import random as rm
 
-print('prima di avviare modificare i path nel codice \n')
 
 def mil_rab(p):
     '''Test di rpimalità di miller rabin
     '''
-    if p == 1: return False
+    if p == 1 or p % 2 == 0: return False
     if p == 2: return True
-    if p % 2 == 0: return False
     m, k = p - 1, 0
     while m % 2 == 0:
         m, k = m // 2, k + 1
@@ -28,7 +25,7 @@ def is_prime(p, r):
        r è il numero di tentativi
     '''
     for i in range(r):
-        if mil_rab(p) == True:
+        if mil_rab(p):
             return True
         else:
             return False
@@ -46,7 +43,7 @@ def gen_primo(k, r):
             return number
 
 
-def MCD(a,b):
+def MCD(a, b):
     '''Calcolo del massimo comune divisore fra a e b
     '''
     while b != 0:
@@ -58,18 +55,18 @@ def CO(phi):
     '''calcola un numero che è coprimo con phi
     '''
     while True:
-        H=rm.randrange(2, phi)
-        if MCD(H, phi)==1:
+        H = rm.randrange(2, phi)
+        if MCD(H, phi) == 1:
             return H
 
 
 def EMCD(a, b):
     '''algoritmo esteso di eculide
     '''
-    x=0; X=1
-    y=1; Y=0
-    r=b; R=a
-    while r!=0:
+    x = 0; X = 1
+    y = 1; Y = 0
+    r = b; R = a
+    while r != 0:
         q = R // r
         R, r = r, R - q*r
         X, x = x, X - q*x
@@ -80,21 +77,21 @@ def EMCD(a, b):
 def MI(a, b):
     ''' tramite ECDM calcola l'inverso moltiplicativo
     '''
-    g, x, y =EMCD(a, b)
-    if x<0:
-        x+=b
+    g, x, y = EMCD(a, b)
+    if x < 0:
+        x += b
     return x
 
 
 def gen_chiavi(dim, r):
     '''genera le chiavi lunghe dim bit
     '''
-    p=gen_primo(dim, r)
-    q=gen_primo(dim, r)
-    N=p*q
-    phi=(p-1)*(q-1)
-    e=CO(phi)
-    d=MI(e, phi)
+    p = gen_primo(dim, r)
+    q = gen_primo(dim, r)
+    N = p * q
+    phi = (p - 1) * (q - 1)
+    e = CO(phi)
+    d = MI(e, phi)
     return N, e, d
 
 
@@ -122,121 +119,97 @@ def decifra(d, N, cifr):
 
 
 def main():
-    i=0
+
     print("Il codice codifica e decodifica testi presenti su un txt. \n"
           "Anche le chiavi se, già si possiedono, devono essere in un txt\n"
           "nell'ordine N, e, d, separate da un a capo.")
     print()
     print("Si è in possesso o si vuole generare la chiave?\ndigitare 0 per generarle, 1 altrimenti")
-    E=int(input("generare?"))
-    if E==0:
-        dim=int(input("dimensione in bit della chiave:"))
-        r=int(input("numeri di tentativi per il test di miller rabin, 40 possono andare:"))
-        N, e, d=gen_chiavi(dim, r)
-        path=r"C:\\Users\\franc\\Desktop\\chiavi.txt"
-        file= open(path, "w")
+    E = int(input("generare?"))
+    if E == 0:
+        dim = int(input("dimensione in bit della chiave:"))
+        r = int(input("numeri di tentativi per il test di miller rabin, 40 possono andare:"))
+        p = input('inseire path dove salvare il file:\n')
+        N, e, d = gen_chiavi(dim, r)
+        path = r"%s.txt"%p
+        file = open(path, "w")
         file.write(str(N))
         file.write('\n')
         file.write(str(e))
         file.write('\n')
         file.write(str(d))
         file.close()
-        print("Chiavi generate e stampate su un file su desktop, verranno poi lette automaticamente")
+        print("Chiavi generate, veranno lette automaticamente")
 
     while True:
-        if(i!=0):
-            print("Ora che vuoi fare?")
-        A=int(input("\n"
-                    "Digitare 1 per leggere file.txt da cifrare \n"
-                    "Digitare 2 per leggere file.txt da decifrare \n"
-                    "Digitare 3 per terminare l'esecuzione'\n"))
+        A = int(input("\n"
+                      "Digitare 1 per leggere file.txt da cifrare \n"
+                      "Digitare 2 per leggere file.txt da decifrare \n"
+                      "Digitare 3 per terminare l'esecuzione \n"))
 
-        if A==1:
-            if E==0:
-                path=r"C:\\Users\\franc\\Desktop\\chiavi.txt"
-                chiave=open(path, "r").read()
-                chiave=chiave.split()
-                N=int(chiave[0])
-                e=int(chiave[1])
+        if A == 1:
+            if E == 0:
+                chiave = open(path, "r").read()
+                chiave = chiave.split()
+                N = int(chiave[0])
+                e = int(chiave[1])
 
-            elif E==1:
-                f=input("Path assoluto del file con le chiavi (doppio \):")
-                path=r"%s.txt"%f
-                chiave=open(path, "r").read()
-                chiave=chiave.split()
-                N=int(chiave[0])
-                e=int(chiave[1])
+            elif E == 1:
+                f = input("Path assoluto del file con le chiavi: \n")
+                path = r"%s.txt"%f
+                chiave = open(path, "r").read()
+                chiave = chiave.split()
+                N = int(chiave[0])
+                e = int(chiave[1])
 
-            G=int(input("digita 0 se il txt non è sul desktop, 1 altrimenti:"))
 
-            if G==0:
-                f=input("Path assoluto del file da leggere (doppio \):")
-                path=r"%s.txt"%f
+            f = input("Path assoluto del file da leggere: \n")
+            pathl = r"%s.txt"%f
+            f1 = input("Path assoluto del file su cui scrivere\n"
+                       "se non esiste esso viene creato automaticamente: \n")
+            paths = r"%s.txt"%f1
 
-                f1=input("Path assoluto del file su cui scrivere\n"
-                         "se non esiste esso viene creato automaticamente:")
-                path1=r"%s.txt"%f1
-
-            elif G==1:
-                f=input("Inserisci il nome del file da leggere:")
-                path=r"C:\\Users\\franc\\Desktop\\%s.txt"%f
-
-                f1=input("Inserisci il nome del file su cui scrivere\n"
-                         "se non esiste esso viene creato automaticamente:")
-                path1=r"C:\\Users\\franc\\Desktop\\%s.txt"%f1
-
-            msg=open(path, "r").read()
+            msg = open(pathl, "r").read()
             enc = cifra(e, N, msg)
 
-            file= open(path1, "w")
+            file = open(paths, "w")
             file.write(enc)
             file.close()
 
+            print("Mesaggio cifrato e stamapto")
 
-        elif A==2:
-            if E==0:
-                path=r"C:\\Users\\franc\\Desktop\\chiavi.txt"
-                chiave=open(path, "r").read()
-                chiave=chiave.split()
-                N=int(chiave[0])
-                d=int(chiave[2])
+        elif A == 2:
+            if E == 0:
+                chiave = open(path, "r").read()
+                chiave = chiave.split()
+                N = int(chiave[0])
+                d = int(chiave[2])
 
-            elif E==1:
-                f=input("Path assoluto del file con le chiavi (doppio \):")
-                path=r"%s.txt"%f
-                chiave=open(path, "r").read()
-                chiave=chiave.split()
-                N=int(chiave[0])
-                d=int(chiave[2])
+            elif E == 1:
+                f = input("Path assoluto del file con le chiavi: \n")
+                path = r"%s.txt"%f
+                chiave = open(path, "r").read()
+                chiave = chiave.split()
+                N = int(chiave[0])
+                d = int(chiave[2])
 
-            G=int(input("Digita 0 se il txt non è sul desktop 1 altrimenti:"))
+            f = input("Path assoluto del file da leggere: \n")
+            pathl = r"%s.txt"%f
+            f1 = input("Path assoluto del file su cui scrivere\n"
+                       "se non esiste esso viene creato automaticamente: \n")
+            paths = r"%s.txt"%f1
 
-            if G==0:
-                f=input("Path assoluto del file da leggere (doppio \):")
-                path=r"%s.txt"%f
-
-                f1=input("Path assoluto del file su cui scrivere\n"
-                         "se non esiste esso viene creato automaticamente:")
-                path1=r"%s.txt"%f1
-
-            elif G==1:
-                f=input("Inserisci il nome del file da leggere:")
-                path=r"C:\\Users\\franc\\Desktop\\%s.txt"%f
-
-                f1=input("Inserisci il nome del file su cui scrivere\n"
-                         "se non esiste esso viene creato automaticamente:")
-                path1=r"C:\\Users\\franc\\Desktop\\%s.txt"%f1
-
-            enc=open(path, "r").read()
+            enc = open(pathl, "r").read()
             dec = decifra(d, N, enc)
 
-            file= open(path1, "w")
+            file = open(paths, "w")
             file.write(dec)
             file.close()
 
+            print("Mesaggio decifrato e stamapto")
 
-        elif A==3:
+        elif A == 3:
+            print("garzie e arrivederci")
             break
-        i=i+1
 
 main()
