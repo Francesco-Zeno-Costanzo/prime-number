@@ -83,6 +83,6 @@ def fattori(n):
 
 R = range(10)
 
-for i in R:
-    print(fattori(i), i)
+a = {n: fattori(n) for n in R}
+print(a)
 
