@@ -2,7 +2,17 @@ import random as rm
 
 
 def mil_rab(p):
-    '''Test di rpimalità di miller rabin
+    '''
+    Test di rpimalità di miller rabin
+
+    Parametri
+    ---------
+    p : int
+        numero di cui controllare la primalità
+
+    Returns
+    ---------
+    Boolean True se p è primo False altrimenti
     '''
     if p == 1 or p % 2 == 0: return False
     if p == 2: return True
@@ -21,8 +31,21 @@ def mil_rab(p):
 
 
 def is_prime(p, r):
-    '''chiamando mil_rab controlla se un numero è primo
-       r è il numero di tentativi
+    '''
+    chiamando mil_rab controlla la primalità
+    il test eseguito non è deterministico quindi
+    è consigliato ripeterlo più volte
+
+    Parameters
+    ----------
+    p : int
+        numero di cui controllare la primalità
+    r : int
+        numero di volte in cui ripetere il controllo
+
+    Returns
+    ---------
+    Boolean True se p è primo False altrimenti
     '''
     for i in range(r):
         if mil_rab(p):
@@ -32,8 +55,21 @@ def is_prime(p, r):
 
 
 def gen_primo(k, r):
-    '''genera casualmnete un numero primo di k bit
-       r è il numero di tentativi
+    '''
+    genera casualmnete un numero  e chiamando
+    is_prime controlla se è primo
+
+    Parameters
+    ----------
+    k : int
+        dimensione in bit del numero che vogliamo generare
+    r : int
+        numero di volte in cui ripetere il controllo
+
+    Returns
+    ----------
+    number : float
+        numero primo di k bit
     '''
     if k < 2:
         return None
@@ -44,7 +80,18 @@ def gen_primo(k, r):
 
 
 def MCD(a, b):
-    '''Calcolo del massimo comune divisore fra a e b
+    '''
+    Calcolo del massimo comune divisore
+
+    Parameters
+    ----------
+    a, b : int
+         numeri di cui calcolare il massimo comun divisore
+
+    Returns
+    ----------
+    a : int
+        massimo comune divisore
     '''
     while b != 0:
         a, b = b, a % b
@@ -52,7 +99,18 @@ def MCD(a, b):
 
 
 def CO(phi):
-    '''calcola un numero che è coprimo con phi
+    '''
+    calcola un numero che è coprimo con phi
+
+    Parameters
+    ----------
+   phi : int
+         numero di cui trovare il coprimo
+
+    Returns
+    ----------
+    H : int
+        numero coprimo a phi
     '''
     while True:
         H = rm.randrange(2, phi)
@@ -61,7 +119,25 @@ def CO(phi):
 
 
 def EMCD(a, b):
-    '''algoritmo esteso di eculide
+    '''
+    algoritmo esteso di eculide, dati due nuemri a e b
+    ne calcola  il massimo comun divisore a anche i coefficenti
+    X e Y tali che: a*X + b*Y = MCD(a, b) [identità di Bézout].
+    Se a e b sono coprimi allora si ha che:
+    1)X è l'inverso moltiplicativo di a modulo b;
+    2)Y è l'inverso moltiplicativo di b modulo a.
+
+    Parameters
+    ----------
+    a, b : int
+         numeri di cui calcolare MCD
+
+    Returns
+    ----------
+    R : int
+        resto della divisione
+    X, Y : int
+        coefficenti dll'identità di Bézout
     '''
     x = 0; X = 1
     y = 1; Y = 0
@@ -75,7 +151,19 @@ def EMCD(a, b):
 
 
 def MI(a, b):
-    ''' tramite ECDM calcola l'inverso moltiplicativo
+    '''
+    tramite ECDM calcola l'inverso moltiplicativo
+    di a modulo b essendo a b coprimi
+
+    Parameters
+    ----------
+    a, b : int
+         devono essere coprimi
+
+    Returns
+    ----------
+    x : int
+        inverso moltiplicativo di a modulo b
     '''
     g, x, y = EMCD(a, b)
     if x < 0:
@@ -84,7 +172,26 @@ def MI(a, b):
 
 
 def gen_chiavi(dim, r):
-    '''genera le chiavi lunghe dim bit
+    '''
+    Genera le chiavi:
+    (N, e) è la chiave pubblica
+    (N, d) e la chiave privata
+
+    Parameters
+    ----------
+    dim : int
+        dimensione in bit della chiave
+    r : int
+        numero di tentatici per il test di miller rabin
+
+    Returns
+    ----------
+    N : int
+        modulo
+    e : int
+        esponente pubblico
+    d : int
+        esponente privato
     '''
     p = gen_primo(dim, r)
     q = gen_primo(dim, r)
@@ -96,7 +203,21 @@ def gen_chiavi(dim, r):
 
 
 def cifra(e, N, msg):
-    '''cifra il messaggio
+    '''
+    cifra il messaggio
+
+    Parameters
+    ----------
+    e, N : int
+        esponente pubblico e modulo rispettivamente
+        formano la chiave pubblica
+    msg : str
+        messaggio da cifrare
+
+    Returns
+    ----------
+    cifr : str
+        messaggio cifrato
     '''
     cifr = ""
     for l in msg:
@@ -107,7 +228,21 @@ def cifra(e, N, msg):
 
 
 def decifra(d, N, cifr):
-    '''decifra il messaggio
+    '''
+    decifra il messaggio
+
+    Parameters
+    ----------
+    d, N : int
+        esponente privato e modulo rispettivamente
+        formano la chiave privata
+    cifr : str
+        messaggio da decifrare
+
+    Returns
+    ----------
+    msg : str
+        messaggio decifrato
     '''
     msg = ""
     lett = cifr.split()
@@ -119,6 +254,8 @@ def decifra(d, N, cifr):
 
 
 def main():
+    '''main del programma
+    '''
 
     print("Il codice codifica e decodifica testi presenti su un txt. \n"
           "Anche le chiavi se, già si possiedono, devono essere in un txt\n"
@@ -126,11 +263,13 @@ def main():
     print()
     print("Si è in possesso o si vuole generare la chiave?\ndigitare 0 per generarle, 1 altrimenti")
     E = int(input("generare?"))
+
     if E == 0:
         dim = int(input("dimensione in bit della chiave:"))
         r = int(input("numeri di tentativi per il test di miller rabin, 40 possono andare:"))
         p = input('inseire path dove salvare il file:\n')
         N, e, d = gen_chiavi(dim, r)
+
         path = r"%s.txt"%p
         file = open(path, "w")
         file.write(str(N))
