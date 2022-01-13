@@ -220,10 +220,14 @@ def cifra(e, N, msg):
         messaggio cifrato
     '''
     cifr = ""
+    i = 0
     for l in msg:
         m = ord(l)
         M = pow(m, e, N)
         cifr += str(M) + " "
+        k = ((i+1)*100)/len(msg)
+        print(f"Percentuale di completamento: {k:.1f}% \r", end='')
+        i += 1
     return cifr
 
 
@@ -246,10 +250,14 @@ def decifra(d, N, cifr):
     '''
     msg = ""
     lett = cifr.split()
+    i = 0
     for l in lett:
         c = int(l)
         C = pow(c, d, N)
         msg += chr(C)
+        k = ((i+1)*100)/len(lett)
+        print(f"Percentuale di completamento: {k:.1f}% \r", end='')
+        i += 1
     return msg
 
 
